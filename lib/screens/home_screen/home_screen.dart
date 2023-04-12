@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController searchCategoria = TextEditingController();
   List<Gasto> listaGasto = [];
 
   @override
@@ -25,72 +26,88 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     int somatorioGasto = 0;
-     int somatorioEntrada = 0;
+    int somatorioEntrada = 0;
     for (var element in listaGasto) {
       if (element.ehGasto) {
         somatorioGasto += element.valor;
       } else {
         somatorioEntrada += element.valor;
       }
-     }
+    }
 
-    
     return Column(
       children: [
         Center(
           child: Column(
             children: [
-              Text("Total GASTO:R\$ ${somatorioGasto/100}"),
-              Text("Total ENTRADA:R\$ ${somatorioEntrada/100}"),
-              Text("Total:R\$ ${(somatorioEntrada-somatorioGasto)/100}"),
+              Text("Total GASTO:R\$ ${somatorioGasto / 100}"),
+              Text("Total ENTRADA:R\$ ${somatorioEntrada / 100}"),
+              Text("Total:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
             ],
           ),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0),
+              child: SizedBox(
+                width: 300,
+                child: TextField(
+                  controller: searchCategoria,
+                  decoration:
+                      InputDecoration(label: Text("Busque por Categoria")),
+                ),
+              ),
+            ),
+            ElevatedButton(onPressed: () {
+              setState(() {
+                listaGasto = listaGasto.where((element) => element.categoria == searchCategoria.text).toList();
+                searchCategoria.clear();
+              });
+            }, child: Icon(Icons.search))
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddGastoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AddGastoScreen()),
                 ).then((value) => setState(() {
-                      GastoDAO()
-                          .getAll()
-                          .then((value) => {setState(() => listaGasto = value)});
+                      GastoDAO().getAll().then(
+                          (value) => {setState(() => listaGasto = value)});
                     }))
               },
               child: Text("Adicionar Gasto"),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddEntradaScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AddEntradaScreen()),
                 ).then((value) => setState(() {
-                      GastoDAO()
-                          .getAll()
-                          .then((value) => {setState(() => listaGasto = value)});
+                      GastoDAO().getAll().then(
+                          (value) => {setState(() => listaGasto = value)});
                     }))
               },
               child: Text("Adicionar Entrada"),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueGrey
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
               onPressed: () => {
-                setState(() {
-                  GastoDAO()
-                          .getAll()
-                          .then((value) => {setState(() => listaGasto = value)});
-                },)
+                setState(
+                  () {
+                    GastoDAO()
+                        .getAll()
+                        .then((value) => {setState(() => listaGasto = value)});
+                  },
+                )
               },
               child: Text("Recarregar"),
             ),
