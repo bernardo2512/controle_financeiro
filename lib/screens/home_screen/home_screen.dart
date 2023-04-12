@@ -40,9 +40,18 @@ class _HomeScreenState extends State<HomeScreen> {
         Center(
           child: Column(
             children: [
-              Text("Total GASTO:R\$ ${somatorioGasto / 100}"),
-              Text("Total ENTRADA:R\$ ${somatorioEntrada / 100}"),
-              Text("Total:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Total GASTO:R\$ ${somatorioGasto / 100}"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Total ENTRADA:R\$ ${somatorioEntrada / 100}"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Total:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
+              ),
             ],
           ),
         ),
