@@ -13,6 +13,7 @@ class _AddEntradaScreenState extends State<AddEntradaScreen> {
   final TextEditingController valorEntrada = TextEditingController();
   final TextEditingController descricaoEntrada = TextEditingController();
   final TextEditingController categoriaEntrada = TextEditingController();
+  final TextEditingController dataEntrada = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,10 @@ class _AddEntradaScreenState extends State<AddEntradaScreen> {
             controller: categoriaEntrada,
             decoration: InputDecoration(label: Text("Categoria da Entrada")),
           ),
+          TextField(
+            controller: dataEntrada,
+            decoration: InputDecoration(label: Text("Data da Entrada (DD-MM-AAAA)")),
+          ),
           Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -41,7 +46,7 @@ class _AddEntradaScreenState extends State<AddEntradaScreen> {
                 ),
             onPressed: () {
               GastoDAO().save(int.parse(valorEntrada.text), descricaoEntrada.text,
-                  categoriaEntrada.text,false);
+                  categoriaEntrada.text,false,dataEntrada.text);
                   Navigator.pop(context);
             },
             child: Text("Salvar Entrada"),

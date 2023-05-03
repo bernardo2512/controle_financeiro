@@ -15,6 +15,7 @@ class _AddGastoScreenState extends State<AddGastoScreen> {
   final TextEditingController valorGasto = TextEditingController();
   final TextEditingController descricaoGasto = TextEditingController();
   final TextEditingController categoriaGasto = TextEditingController();
+  final TextEditingController dataGasto = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,11 @@ class _AddGastoScreenState extends State<AddGastoScreen> {
             controller: categoriaGasto,
             decoration: InputDecoration(label: Text("Categoria do Gasto")),
           ),
+          TextField(
+            controller: dataGasto,
+            decoration: InputDecoration(label: Text("Data do Gasto (DD-MM-AAAA)")),
+          ),
+          
           Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -43,7 +49,7 @@ class _AddGastoScreenState extends State<AddGastoScreen> {
                 ),
             onPressed: () {
               GastoDAO().save(int.parse(valorGasto.text), descricaoGasto.text,
-                  categoriaGasto.text,true);
+                  categoriaGasto.text,true, dataGasto.text);
                   Navigator.pop(context);
             },
             child: Text("Salvar Gasto"),

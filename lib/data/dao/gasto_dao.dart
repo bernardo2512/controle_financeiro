@@ -9,15 +9,16 @@ class GastoDAO {
         valor INTEGER NOT NULL,
         description TEXT,
         categoria TEXT,
+        data TEXT,
         ehGasto BOOLEAN NOT NULL
       )
       """;
 
-  save(int valor, String description, String categoria, bool ehGasto) async {
+  save(int valor, String description, String categoria, bool ehGasto, String data) async {
 
     final sql.Database bancoDeDados = await getDatabase();
-    final data = {'valor': valor, 'description': description, 'categoria': categoria,'ehGasto': ehGasto };
-    await bancoDeDados.insert(tableName, data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    final objectData = {'valor': valor, 'description': description, 'categoria': categoria,'ehGasto': ehGasto,'data': data };
+    await bancoDeDados.insert(tableName, objectData, conflictAlgorithm: sql.ConflictAlgorithm.replace);
     
   }
   delete(int id) async {
@@ -34,7 +35,8 @@ class GastoDAO {
   List<Gasto> toList(List<Map<String, dynamic>> data){
     List<Gasto> listaGastos = [];
     for(Map<String, dynamic> item in data){
-      listaGastos.add(Gasto(item['id'],item['valor'], item['description'],item['categoria'],item['ehGasto']>0? true: false));
+      // delete(item['id']);
+      listaGastos.add(Gasto(item['id'],item['valor'], item['description'],item['categoria'],item['ehGasto']>0? true: false,item['data']));
       
     }
     return listaGastos;

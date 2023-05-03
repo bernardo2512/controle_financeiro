@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Total GASTO:R\$ ${somatorioGasto / 100}"),
+                child: Text("Total SAIDA:R\$ ${somatorioGasto / 100}"),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Total:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
+                child: Text("${somatorioEntrada - somatorioGasto < 0 ? "Divida" : "Saldo"}:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
               ),
             ],
           ),
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context) => const AddGastoScreen()),
                 ).then((value) => setState(() {
                       GastoDAO().getAll().then(
-                          (value) => {setState(() => listaGasto = value)});
+                          (value) => listaGasto = value);
                     }))
               },
               child: Text("Adicionar Gasto"),

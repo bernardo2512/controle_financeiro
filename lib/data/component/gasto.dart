@@ -8,8 +8,9 @@ class Gasto extends StatefulWidget {
   final String description;
   final String categoria;
   final bool ehGasto;
+  final String data;
   const Gasto(
-      this.id, this.valor, this.description, this.categoria, this.ehGasto,
+      this.id, this.valor, this.description, this.categoria, this.ehGasto,this.data,
       {super.key});
 
   @override
@@ -37,7 +38,7 @@ class _GastoState extends State<Gasto> {
                 Text("R\$ ${widget.valor / 100}"),
                 Text(widget.description),
                 Text(widget.categoria),
-                Text("${widget.ehGasto ? 'GASTO' : 'ENTRADA'}")
+                Text(widget.data)
               ],
             ),
             Padding(
