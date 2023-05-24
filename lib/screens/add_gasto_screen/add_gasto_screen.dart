@@ -49,7 +49,7 @@ class _AddGastoScreenState extends State<AddGastoScreen> {
                 ),
             onPressed: () {
               GastoDAO().save(int.parse(valorGasto.text), descricaoGasto.text,
-                  categoriaGasto.text,true, dataGasto.text);
+                  categoriaGasto.text,true, dataGasto.text.isEmpty ? DateTime.now().toString():dataGasto.text);
                   Navigator.pop(context);
             },
             child: Text("Salvar Gasto"),
