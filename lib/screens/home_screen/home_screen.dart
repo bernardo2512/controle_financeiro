@@ -2,6 +2,7 @@ import 'package:controle_financeiro/data/component/gasto.dart';
 import 'package:controle_financeiro/data/dao/gasto_dao.dart';
 import 'package:controle_financeiro/screens/add_entrada_screen/add_entrada_sreen.dart';
 import 'package:controle_financeiro/screens/add_gasto_screen/add_gasto_screen.dart';
+import 'package:controle_financeiro/services/save_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -50,17 +51,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("${somatorioEntrada - somatorioGasto < 0 ? "Divida" : "Saldo"}:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
+                child: Text(
+                    "${somatorioEntrada - somatorioGasto < 0 ? "Divida" : "Saldo"}:R\$ ${(somatorioEntrada - somatorioGasto) / 100}"),
               ),
             ],
           ),
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 5.0),
               child: SizedBox(
-                width: 300,
+                width: 275,
                 child: TextField(
                   controller: searchCategoria,
                   decoration:
@@ -68,12 +71,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            ElevatedButton(onPressed: () {
-              setState(() {
-                listaGasto = listaGasto.where((element) => element.categoria == searchCategoria.text).toList();
-                searchCategoria.clear();
-              });
-            }, child: Icon(Icons.search))
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    listaGasto = listaGasto
+                        .where((element) =>
+                            element.categoria == searchCategoria.text)
+                        .toList();
+                    searchCategoria.clear();
+                  });
+                },
+                child: Icon(Icons.search)
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                onPressed: () {
+                  SavePdf(listaGasto).salvar();
+                },
+                child: Icon(Icons.download)
+              ),
           ],
         ),
         Row(
@@ -86,10 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const AddGastoScreen()),
-                ).then((value) => setState(() {
-                      GastoDAO().getAll().then(
-                          (value) => listaGasto = value);
-                    }))
+                ).then((value) => () {
+                      GastoDAO()
+                          .getAll()
+                          .then((value) => setState(() => listaGasto = value));
+                    })
               },
               child: Text("Adicionar Gasto"),
             ),
@@ -100,23 +117,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const AddEntradaScreen()),
-                ).then((value) => setState(() {
-                      GastoDAO().getAll().then(
-                          (value) => {setState(() => listaGasto = value)});
-                    }))
+                ).then((value) => () {
+                      GastoDAO()
+                          .getAll()
+                          .then((value) => setState(() => listaGasto = value));
+                    })
               },
               child: Text("Adicionar Entrada"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
               onPressed: () => {
-                setState(
-                  () {
-                    GastoDAO()
-                        .getAll()
-                        .then((value) => {setState(() => listaGasto = value)});
-                  },
-                )
+                GastoDAO()
+                    .getAll()
+                    .then((value) => {setState(() => listaGasto = value)})
               },
               child: Text("Recarregar"),
             ),

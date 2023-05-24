@@ -46,7 +46,7 @@ class _AddEntradaScreenState extends State<AddEntradaScreen> {
                 ),
             onPressed: () {
               GastoDAO().save(int.parse(valorEntrada.text), descricaoEntrada.text,
-                  categoriaEntrada.text,false,dataEntrada.text);
+                  categoriaEntrada.text,false,dataEntrada.text.isEmpty ? DateTime.now().toString():dataEntrada.text);
                   Navigator.pop(context);
             },
             child: Text("Salvar Entrada"),
